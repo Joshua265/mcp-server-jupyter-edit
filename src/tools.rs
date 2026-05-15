@@ -39,14 +39,6 @@ pub struct WriteNotebookResponse {
 }
 
 pub fn write_notebook(req: WriteNotebookRequest) -> Result<WriteNotebookResponse> {
-    let path = Path::new(&req.path);
-    
-    if let Some(parent) = path.parent() {
-        if !parent.exists() {
-            anyhow::bail!("Directory does not exist: {}", parent.display());
-        }
-    }
-
     let (notebook, warnings) = llm_format_to_notebook(&req.content)?;
     write_notebook_file(&req.path, &notebook)?;
 
